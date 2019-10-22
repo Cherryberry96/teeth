@@ -1,2 +1,0 @@
-# teeth
-Data Replication Project
