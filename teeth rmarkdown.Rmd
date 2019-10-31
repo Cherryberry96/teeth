@@ -1,0 +1,43 @@
+---
+title: "project"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# What is PCA?
+# a type of linear transformation on a given data set that has values for a certain number of variables (coordinates) for a certain amount of spaces
+# This linear transformation fits this dataset to a new coordinate system in such a way that the most significant variance is found on the first coordinate, and each subsequent coordinate is orthogonal to the last and has a lesser variance
+# Where many variables correlate with one another, they will all contribute strongly to the same principal component
+# Each principal component sums up a certain percentage of the total variation in the dataset
+# As you add more principal components, you summarize more and more of the original dataset. Adding additional components makes your estimate of the total dataset more accurate, but also more unwieldy
+
+
+# Eigenvalues and Eigenvectors
+#  Simply put, an eigenvector is a direction, such as "vertical" or "45 degrees"
+# an eigenvalue is a number telling you how much variance there is in the data in that direction
+# THE EIGENVECTOR WITH THE HIGHEST EIGENVALUE IS, THEREFORE, THE FIRST PRINCIPLE COMPONENT
+# The number of eigenvalues and eigenvectors that exits is equal to the number of dimensions the data set has
+# EX: 2 VARIABLES = 2 DIMENSIONAL
+
+
+# A SIMPLE PCA EXAMPLE
+# Using mtcars dataset, 32 models of a car, each car has 11 features expressed in varying units
+# PCA WORKS BETTER WITH NUMERICAL DATA SO CATEGORICAL VARIABLES WILL BE EXCLUDED
+
+```{r}
+mtcars.pca <- prcomp(mtcars[,c(1:7, 10, 11)], center = TRUE,scale. = TRUE)
+summary(mtcars.pca)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
