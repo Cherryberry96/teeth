@@ -1,10 +1,10 @@
 ---
-title: "Principle Component Analysis"
+title: "Principle Component Analysis Notes"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(include = FALSE)
 ```
 
 ## R Markdown
