@@ -188,6 +188,7 @@ text(LoadsData[, 1] * 10.2, LoadsData[, 3] * 10.2, labels = rownames(LoadsData))
 
 legend("topleft", legend = c("High Risk", "Medium Risk", "Low Risk", "Null Risk"), 
     col = c("darkorchid1", "aquamarine", "khaki1", "plum2"), pch = 16)
+    
 **Plotting PC1 v. PC4**
 
 lmin = min(scoreData[, c(1, 4)])
