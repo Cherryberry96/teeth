@@ -1,10 +1,57 @@
 ---
 title: "Principle Component Analysis Notes"
 output: html_document
+
+# What is PCA?
+a type of linear transformation on a given data set that has values for a certain number of variables (coordinates) for a certain amount of spaces
+This linear transformation fits this dataset to a new coordinate system in such a way that the most significant variance is found on the first coordinate, and each subsequent coordinate is orthogonal to the last and has a lesser variance
+Where many variables correlate with one another, they will all contribute strongly to the same principal component
+Each principal component sums up a certain percentage of the total variation in the dataset
+As you add more principal components, you summarize more and more of the original dataset. Adding additional components makes your estimate of the total dataset more accurate, but also more unwieldy
+
+The first principal component is constructed to account for as much of the spread in the data as possible. Each subsequent PC is calculated in the same manner but under a requirement that it is orthogonal (and therefore uncorrelated) to the previous PC, and should account for the maximum amount of the remaining variance in the data
+Useful when you have a dataset that either has a large number of variables, and/or you have variables that have been measured in different scales
+
+# Eigenvalues and Eigenvectors
+
+Simply put, an eigenvector is a direction, such as "vertical" or "45 degrees,"
+an eigenvalue is a number telling you how much variance there is in the data in that direction
+
+THE EIGENVECTOR WITH THE HIGHEST EIGENVALUE IS, THEREFORE, THE FIRST PRINCIPLE COMPONENT
+The number of eigenvalues and eigenvectors that exits is equal to the number of dimensions the data set has
+EX: 2 VARIABLES = 2 DIMENSIONAL
+
+**Eigenvectors**: the direction in which the particular PC is oriented
+
+**Eigenvalues**: the corresponding amount of variance that is accounted for by a each PC.
+PC scores: new variables calculated by multiplying the original variables measured for each datapoint by the eigenvectors, and then summing them together. PC scores are what can be plotted to visualize the data after reducing the dimensionality of it
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(include = FALSE)
+library(ggplot2)
+
+library(curl)
+
+library(psych)
+
+library(factoextra)
+
+
+f <- curl("https://raw.githubusercontent.com/benrod86/PCA/master/Froggy_hop_hop.csv")
+
+h <- read.csv(f, header = TRUE, sep = ",", stringsAsFactors = TRUE)
+
+head(h)
+
+Data = h[, 1:8]
+
+head(Data)
+
+CorDat = cor(Data)
+
+CorDat
+
+pairs(Data, panel = function(x, y) {points(x, y) abline(lm(y ~ x), col = "red", lwd = 2)})
 ```
 
 ## R Markdown
