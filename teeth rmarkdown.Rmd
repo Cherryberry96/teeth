@@ -1,5 +1,5 @@
 ---
-Teeth dataset - *Unique Dental Morphology of Homo floresiensis and Its Evolutionary Implications*
+Teeth dataset - # Unique Dental Morphology of Homo floresiensis and Its Evolutionary Implications
 ---
 
 ```{r setup, include=FALSE}
