@@ -143,6 +143,7 @@ newData_low <- subset(newData, newData[, 9] == "low")
 newData_null <- subset(newData, newData[, 9] == "null")
 
 **Plotting PC1 v. PC2**
+
 lmin <- min(scoreData[, c(1, 2)])
 
 lmax <- max(scoreData[, c(1, 2)])
