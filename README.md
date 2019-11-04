@@ -64,7 +64,7 @@ N = dim(Data)[1]
 
 cortest.bartlett(CorDat, n = N)
 
-#calculate eigenvalues and eigenvectors
+# calculate eigenvalues and eigenvectors
 eigVal = eigen(CorDat)
 
 vectData = eigVal$vectors
@@ -82,7 +82,7 @@ plot(c(1:length(eigVal$values)), eigVal$values, type = "l", xlab = "Principal Co
 
 points(c(1:length(eigVal$values)), eigVal$values, pch = 19)
 
-#same scree plot but using ggplot2
+# same scree plot but using ggplot2
 library(factoextra)
 prt = prcomp(Data, center = TRUE, scale = TRUE)
 summary(prt)
