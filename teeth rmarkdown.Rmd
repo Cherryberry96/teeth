@@ -2,8 +2,11 @@
 Teeth dataset - # Unique Dental Morphology of Homo floresiensis and Its Evolutionary Implications
 ---
 
-```{r setup, include=FALSE}
-
+```{r setup, include=TRUE}
+f <- "~/Desktop/Data Replication Stuff/S4 Table.xlsx"
+library(readxl)
+Teeth_Data <- read_excel(f, sheet = 1, col_names = TRUE)
+head(Teeth_Data)
 ```
 
 
