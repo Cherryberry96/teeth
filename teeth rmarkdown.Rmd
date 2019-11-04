@@ -13,15 +13,33 @@ an eigenvalue is a number telling you how much variance there is in the data in 
 THE EIGENVECTOR WITH THE HIGHEST EIGENVALUE IS, THEREFORE, THE FIRST PRINCIPLE COMPONENT
 The number of eigenvalues and eigenvectors that exits is equal to the number of dimensions the data set has
 EX: 2 VARIABLES = 2 DIMENSIONAL
+Eigenvectors: the direction in which the particular PC is oriented.
+Eigenvalues: the corresponding amount of variance that is accounted for by a each PC.
+PC scores: new variables calculated by multiplying the original variables measured for each datapoint by the eigenvectors, and then summing them together. PC scores are what can be plotted to visualize the data after reducing the dimensionality of it
 
 
-A SIMPLE PCA EXAMPLE
-Using mtcars dataset, 32 models of a car, each car has 11 features expressed in varying units
-PCA WORKS BETTER WITH NUMERICAL DATA SO CATEGORICAL VARIABLES WILL BE EXCLUDED
+The first principal component is constructed to account for as much of the spread in the data as possible
+Each subsequent PC is calculated in the same manner but under a requirement that it is orthogonal (and therefore uncorrelated) to the previous PC, and should account for the maximum amount of the remaining variance in the data
+Useful when you have a dataset that either has a large number of variables, and/or you have variables that have been measured in different scales
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(curl)
+library(psych)
+library(factoextra)
+
+f <- curl("https://raw.githubusercontent.com/benrod86/PCA/master/Froggy_hop_hop.csv")
+h <- read.csv(f, header = TRUE, sep = ",", stringsAsFactors = TRUE)
+head(h)
+Data = h[, 1:8]
+head(Data)
+CorDat = cor(Data)
+CorDat
+pairs(Data, panel = function(x, y) {points(x, y)
+    abline(lm(y ~ x), col = "red", lwd = 2)})
 ```
 
 
