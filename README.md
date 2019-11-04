@@ -78,3 +78,11 @@ eigValv
 
 #plotting eigenvalues through a scree plot
 #scree plot: allow us to visualize how the variance represented by each PC drops off
+plot(c(1:length(eigVal$values)), eigVal$values, type = "l", xlab = "Principal Components", 
+    ylab = "Eigenvalues")
+points(c(1:length(eigVal$values)), eigVal$values, pch = 19)
+#same scree plot but using ggplot2
+library(factoextra)
+prt = prcomp(Data, center = TRUE, scale = TRUE)
+summary(prt)
+fviz_eig(prt, xlab = "Principal Components")
