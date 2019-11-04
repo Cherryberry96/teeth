@@ -1,5 +1,5 @@
 ---
-
+Teeth dataset - *Unique Dental Morphology of Homo floresiensis and Its Evolutionary Implications*
 ---
 
 ```{r setup, include=FALSE}
@@ -9,16 +9,18 @@
 
 
 ```{r}
-mtcars.pca <- prcomp(mtcars[,c(1:7, 10, 11)], center = TRUE,scale. = TRUE)
-summary(mtcars.pca)
+
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
 ```{r pressure, echo=FALSE}
-plot(pressure)
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+
+```
+
+
