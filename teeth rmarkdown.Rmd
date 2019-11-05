@@ -1,6 +1,10 @@
 ---
-Teeth dataset - # Unique Dental Morphology of Homo floresiensis and Its Evolutionary Implications
+title: Teeth dataset - # Unique Dental Morphology of Homo floresiensis and Its Evolutionary Implications
+output: html_document
 ---
+# import dataset
+To get my data I went to the orig
+
 
 ```{r setup, include=TRUE}
 f <- "~/Desktop/Data Replication Stuff/S4 Table.xlsx"
@@ -12,18 +16,39 @@ head(Teeth_Data)
 
 
 ```{r}
+Data = Teeth_Data[, 1:8]
+head(Data)
+Data
 
+Data1 = Teeth_Data[, 3:10]
+head(Data1)
+Data1
+
+Data2 = Teeth_Data[4:738, 3:10]
+head(Data2)
+Data2
+
+Data3 = Teeth_Data[, 1:18]
+head(Data3)
+Data3
 ```
 
-
+# Create a Correlation Matrix
 
 ```{r pressure, echo=FALSE}
 
+#CorDat = cor(Data)
+
+#CorDat1 = cor(Data1)
+
+#CorDat2 = cor(Data2)
+
+#CorDat3 = cor(Data3)
 ```
 
 
 ```{r}
-
+#pca <- prcomp(Data1[, 4:7], center = TRUE, scale. = TRUE)
 ```
 
 
