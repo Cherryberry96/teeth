@@ -1,9 +1,9 @@
 ---
-title: Teeth dataset - # Unique Dental Morphology of Homo floresiensis and Its Evolutionary Implications
+title: Teeth dataset
 output: html_document
 ---
-# import dataset
-To get my data I went to the orig
+# Importing dataset
+I obtained my data from an article on Plos One called "Unique Dental Morphology of Homo floresiensis and Its Evolutionary Implications." After downloading the supplemental materials, I exported the dataset into R using the readxl package and assigned the name "Teeth_Data" to the dataset.
 
 
 ```{r setup, include=TRUE}
@@ -13,42 +13,36 @@ Teeth_Data <- read_excel(f, sheet = 1, col_names = TRUE)
 head(Teeth_Data)
 ```
 
+# Principal Component Analysis
+The test I will attempt to replicate here is a descriptive test called the Principal Component Analysis in which the original dataset is transformed into principal components where each one sums up a certain percentage of the total variation in the dataset.
 
+To begin with, before running the principal component analysis, the authors in the article adjusted the size of the MD and BL crown diameters by dividing them by crown size factor (Kaifu et al., 4). Crown size factor can be defined as the square root of the average crown area for each individual. Or, in other words, the average of all four teeth of one individual when MD x BL
 
 ```{r}
-Data = Teeth_Data[, 1:8]
-head(Data)
-Data
+LB1R <- Teeth_Data[5,9:16]
+LB1R
+LB1R$...9 * LB1R$...10
+class(LB1R)
 
-Data1 = Teeth_Data[, 3:10]
-head(Data1)
-Data1
+x <- Teeth_Data[5, 9]
+class(x)
+x  
 
-Data2 = Teeth_Data[4:738, 3:10]
-head(Data2)
-Data2
+y <- Teeth_Data[5,10]
 
-Data3 = Teeth_Data[, 1:18]
-head(Data3)
-Data3
+x * y
+
 ```
 
 # Create a Correlation Matrix
 
 ```{r pressure, echo=FALSE}
 
-#CorDat = cor(Data)
-
-#CorDat1 = cor(Data1)
-
-#CorDat2 = cor(Data2)
-
-#CorDat3 = cor(Data3)
 ```
 
 
 ```{r}
-#pca <- prcomp(Data1[, 4:7], center = TRUE, scale. = TRUE)
+
 ```
 
 
