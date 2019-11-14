@@ -2,7 +2,7 @@
 title: Teeth dataset
 output: html_document
 ---
-# Importing dataset
+# Introduction
 I obtained my data from an article on Plos One called "Unique Dental Morphology of Homo floresiensis and Its Evolutionary Implications." This article examines dental morphologies and traits of Homo florensiensis to determine whether they are comparable to claims that they are more similar to modern humans or to earlier hominins. Comparable "species" for humans involved two categories which were Archaic Homo (including H. erectus, H. habilis sensu lato, Dmanisi, H. ergaster and MP China) and Homo sapiens (including Prehistoric Indonesia, prehistoric Vietnam, Phillipine Negrito, New Guinea, Australian Aborigines, SE Asia, NE Asia, SA Bushman, African Pygmy, South Africa, East Africa, West Africa, India and Europe). To do this, the authors first conducted a principal component analysis which I will attempt to replicate below. 
 
 To begin with, I downloaded the supplemental materials and exported the dataset into R using the readxl package and assigned the name "z" to the dataset. Next, I will describe what a Principal Component Analysis is and what I did to try to replicate the Authors' results.
@@ -118,7 +118,7 @@ pcaplot <- ggplot(data = z4, mapping = aes(x = PC1, y = PC2, shape = Species,
 pcaplot
 ```
 
-# Article comparison
+# Summary
 
 When compared to the article itself, I was not able to exactly replicate the authors' pca plot due in part to a warning message I received that said the shape palate could deal with only a maximum of 6 discrete values. In other words, unlike that of the article, I was not able to display all of the comparative hominin variables on the pca plot.
 
@@ -134,3 +134,7 @@ img src = "img/PCA.png" width = "200px"
 
 ```
 
+# References:
+Kaifu et. al. "Unique Dental Morphology of Homo floresiensis and Its Evolutionary Implications." Plos One. 2015.
+
+Principal Component Analysis Module https://difiore.github.io/applied-data-analysis-s2019/PCA/PCA.html
