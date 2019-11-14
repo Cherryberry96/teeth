@@ -3,46 +3,134 @@ title: Teeth dataset
 output: html_document
 ---
 # Importing dataset
-I obtained my data from an article on Plos One called "Unique Dental Morphology of Homo floresiensis and Its Evolutionary Implications." After downloading the supplemental materials, I exported the dataset into R using the readxl package and assigned the name "Teeth_Data" to the dataset.
+I obtained my data from an article on Plos One called "Unique Dental Morphology of Homo floresiensis and Its Evolutionary Implications." This article examines dental morphologies and traits of Homo florensiensis to determine whether they are comparable to claims that they are more similar to modern humans or to earlier hominins. Comparable "species" for humans involved two categories which were Archaic Homo (including H. erectus, H. habilis sensu lato, Dmanisi, H. ergaster and MP China) and Homo sapiens (including Prehistoric Indonesia, prehistoric Vietnam, Phillipine Negrito, New Guinea, Australian Aborigines, SE Asia, NE Asia, SA Bushman, African Pygmy, South Africa, East Africa, West Africa, India and Europe). To do this, the authors first conducted a principal component analysis which I will attempt to replicate below. 
+
+To begin with, I downloaded the supplemental materials and exported the dataset into R using the readxl package and assigned the name "z" to the dataset. Next, I will describe what a Principal Component Analysis is and what I did to try to replicate the Authors' results.
 
 
 ```{r setup, include=TRUE}
-f <- "~/Desktop/Data Replication Stuff/S4 Table.xlsx"
+f <- "~/Desktop/Data Replication Stuff/S4 Table restructured.xlsx"
 library(readxl)
-Teeth_Data <- read_excel(f, sheet = 1, col_names = TRUE)
-head(Teeth_Data)
+z <- read_excel(f, sheet = 1, col_names = TRUE)
+head(z)
 ```
 
 # Principal Component Analysis
 The test I will attempt to replicate here is a descriptive test called the Principal Component Analysis in which the original dataset is transformed into principal components where each one sums up a certain percentage of the total variation in the dataset.
 
-To begin with, before running the principal component analysis, the authors in the article adjusted the size of the MD and BL crown diameters by dividing them by crown size factor (Kaifu et al., 4). Crown size factor can be defined as the square root of the average crown area for each individual. Or, in other words, the average of all four teeth of one individual when MD x BL
+To begin with, before running the principal component analysis, the authors in the article adjusted the size of the MD and BL crown diameters by dividing them by crown size factor (Kaifu et al., 4). Crown size factor can be defined as the square root of the average crown area for each individual. Or, in other words, the average of all four teeth of one individual when MD x BL. In the article, the authors examined four maxillary and mandibular teeth for each individual. Maxillary teeth included P1, P2, M1 and M2, while mandibular teeth included P1, M1, M2 and M3. Different teeth were used and chosen based on the availability of teeth for the species as well as the extent of wear for H. floresiensis.
+
+# Size Adjusting Maxillary Tooth Diameter with Crown Size Factor (CSF)
+
+Here I adjusted the maxillary tooth diameter by calculating the area for each of the four teeth and then obtaining the average. The average was then divided by the square root and from this, I was able to calculate crown size factor (CSF).
 
 ```{r}
-LB1R <- Teeth_Data[5,9:16]
-LB1R
-LB1R$...9 * LB1R$...10
-class(LB1R)
+library(dplyr)
+library(ggplot2)
+z<-mutate(z,MAXP1AREA=MAXP1MD*MAXP1BL)
+z<-mutate(z,MAXP2AREA=MAXP2MD*MAXP2BL)
+z<-mutate(z,MAXM1AREA=MAXM1MD*MAXM1BL)
+z<-mutate(z,MAXM2AREA=MAXM2MD*MAXM2BL)
 
-x <- Teeth_Data[5, 9]
-class(x)
-x  
+z<-mutate(z,MAXAVG=(MAXP1AREA+MAXP2AREA+MAXM1AREA+MAXM2AREA)/4)
+z<-mutate(z,MAXCSF=sqrt(MAXAVG))
 
-y <- Teeth_Data[5,10]
+z<-mutate(z,SAMAXP1MD=MAXP1MD/MAXCSF)
+z<-mutate(z,SAMAXP2MD=MAXP2MD/MAXCSF)
+z<-mutate(z,SAMAXM1MD=MAXM1MD/MAXCSF)
+z<-mutate(z,SAMAXM2MD=MAXM2MD/MAXCSF)
 
-x * y
+
+z<-mutate(z,SAMAXP1BL=MAXP1BL/MAXCSF)
+z<-mutate(z,SAMAXP2BL=MAXP2BL/MAXCSF)
+z<-mutate(z,SAMAXM1BL=MAXM1BL/MAXCSF)
+z<-mutate(z,SAMAXM2BL=MAXM2BL/MAXCSF)
 
 ```
 
-# Create a Correlation Matrix
+# Running the Principal Componenent Analysis for Maxillary Tooth Diameters
 
-```{r pressure, echo=FALSE}
+Now that the crown size factor has been calculated, I selected the size adjusted diameters using the select function from dplyr. It is worth noting that running a principle component analysis won't work if there are missing or Na values for x, so the na.omit function was used to isolate the measurements of interest. After calculating the pca scores for maxillary teeth, I reattached the Species names of each datapoint and extracted the pca scores into a new data frame. Finally, I plotted the first two PCA scores using the pcaplot function.
+
+```{r}
+max <- select(z,SAMAXP1MD,SAMAXP2MD,SAMAXM1MD,SAMAXM2MD,SAMAXP1BL,SAMAXP2BL,SAMAXM1BL,SAMAXM2BL)
+new_max <- na.omit(max)
+max.pca <- prcomp(new_max, center = TRUE, scale. = TRUE)
+summary(max.pca)
+biplot(max.pca$x[, c(1, 2)], max.pca$rotation[, c(1, 2)])
+
+t <- select(z,Species,SAMAXP1MD,SAMAXP2MD,SAMAXM1MD,SAMAXM2MD,SAMAXP1BL,SAMAXP2BL,SAMAXM1BL,SAMAXM2BL)
+z1 <- na.omit(t)
+z2 <- as.data.frame(max.pca$x)
+z2$Species <- z1$Species
+head(z2)
+
+pcaplot <- ggplot(data = z2, mapping = aes(x = PC1, y = PC2, shape = Species, 
+                                           col = Species, label = Species)) + geom_point()
+pcaplot
+```
+
+# Size Adjusting Mandibular Tooth Diameter with Crown Size Factor (CSF)
+
+Similarly, just as before, I calculated the average and divided it by the square root to calculate crown size factor for each mandibular tooth diameter using the mutate function to create new columns and new variables.
+
+```{r}
+z<-mutate(z,MANDP1AREA=MANDLP1MD*MANDLP1BL)
+z<-mutate(z,MANDM1AREA=MANDLM1MD*MANDLM1BL)
+z<-mutate(z,MANDM2AREA=MANDLM2MD*MANDLM2BL)
+z<-mutate(z,MANDM3AREA=MANDLM3MD*MANDLM3BL)
+
+z<-mutate(z,MANDAVG=(MANDP1AREA+MANDM1AREA+MANDM2AREA+MANDM3AREA)/4)
+z<-mutate(z,MANDCSF=sqrt(MANDAVG))
+
+z<-mutate(z,SAMANDP1MD=MANDLP1MD/MANDCSF)
+z<-mutate(z,SAMANDM1MD=MANDLM1MD/MANDCSF)
+z<-mutate(z,SAMANDM2MD=MANDLM2MD/MANDCSF)
+z<-mutate(z,SAMANDM3MD=MANDLM3MD/MANDCSF)
+
+z<-mutate(z,SAMANDP1BL=MANDLP1BL/MANDCSF)
+z<-mutate(z,SAMANDM1BL=MANDLM1BL/MANDCSF)
+z<-mutate(z,SAMANDM2BL=MANDLM2BL/MANDCSF)
+z<-mutate(z,SAMANDM3BL=MANDLM3BL/MANDCSF)
 
 ```
+
+# Running the Principal Componenent Analysis for Mandibular Tooth Diameters
+
+Once again, I selected for the variables of interest to run the principal component analysis and created a pca plot using the ggplot function from the ggplot2 package.
+
+
+```{r}
+mand <- select(z,SAMANDP1MD,SAMANDM1MD,SAMANDM2MD,SAMANDM3MD,SAMANDP1BL,SAMANDM1BL,SAMANDM2BL,SAMANDM3BL)
+new_mand <- na.omit(mand)
+mand.pca <- prcomp(new_mand, center = TRUE, scale. = TRUE)
+summary(mand.pca)
+biplot(mand.pca$x[, c(1, 2)], mand.pca$rotation[, c(1, 2)])
+
+t2 <- select(z,Species, SAMANDP1MD,SAMANDM1MD,SAMANDM2MD,SAMANDM3MD,SAMANDP1BL,SAMANDM1BL,SAMANDM2BL,SAMANDM3BL)
+z3 <- na.omit(t2)
+z4 <-  as.data.frame(mand.pca$x)
+z4$Species <- z3$Species
+head(z4)
+
+pcaplot <- ggplot(data = z4, mapping = aes(x = PC1, y = PC2, shape = Species, 
+                                           col = Species, label = Species)) + geom_point()
+pcaplot
+```
+
+# Article comparison
+
+When compared to the article itself, I was not able to exactly replicate the authors' pca plot due in part to a warning message I received that said the shape palate could deal with only a maximum of 6 discrete values. In other words, unlike that of the article, I was not able to display all of the comparative hominin variables on the pca plot.
+
+
+```{r}
+img src = "img/PCA.png" width = "200px"
+
+```
+
 
 
 ```{r}
 
 ```
-
 
