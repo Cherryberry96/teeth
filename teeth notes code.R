@@ -253,3 +253,16 @@ biplot(t.pca$x[, c(1, 2)], t.pca$rotation[, c(1, 2)])
 
 
 library(dplyr)
+
+
+
+
+
+
+
+
+
+
+
+
+
