@@ -59,16 +59,6 @@ class(TD$MANDLM3BL)
 
 
 
-Data = TD[, 5:36]
-head(Data)
-
-
-CorDat = cor(Data)
-CorDat
-
-CorDat = cor(dat)
-CorDat
-
 library(ggplot2)
 library(psych)
 library(factoextra)
@@ -87,6 +77,15 @@ pairs(dat, panel = function(x, y) {
 })
 
 # BARTLETT'S TEST OF SPHERICITY
+Data = TD[, 5:36]
+head(Data)
+
+
+CorDat = cor(Data)
+CorDat
+
+CorDat = cor(dat)
+CorDat
 N = dim(Data)[1]
 cortest.bartlett(CorDat, n = N)
 
@@ -138,11 +137,20 @@ biplot(scoreData[, c(1, 2)], LoadsData[, c(1, 2)], xlabs = rep("*", 980), col = 
                                                                                   "black"))
 
 
+# ------------------------------------------------------------------------------------------------------
 
 
+f <- "~/Desktop/Data Replication Stuff/S4 Table restructured.xlsx"
+library(readxl)
 z <- read_excel(f, sheet = 1, col_names = TRUE)
+head(z)
 names(z)
-z<-mutate(z,MAXI1AREA=MAXI1MD*MAXI1LL)
+
+library(ggplot2)
+library(psych)
+library(factoextra)
+library(dplyr)
+
 
 
 z<-mutate(z,MAXP1AREA=MAXP1MD*MAXP1BL)
@@ -202,67 +210,148 @@ summary(mand.pca)
 biplot(mand.pca$x[, c(1, 2)], mand.pca$rotation[, c(1, 2)])
 
 
-t <- select(z,Class,SAMAXP1MD,SAMAXP2MD,SAMAXM1MD,SAMAXM2MD,SAMAXP1BL,SAMAXP2BL,SAMAXM1BL,SAMAXM2BL)
+t <- select(z,Species,Class,Source,Specimen, SAMAXP1MD,SAMAXP2MD,SAMAXM1MD,SAMAXM2MD,SAMAXP1BL,SAMAXP2BL,SAMAXM1BL,SAMAXM2BL)
 z1 <- na.omit(t)
-z2 <- as.data.frame(max.pca$x)  # Extract the PCA scores for each sample into a new dataframe
-z2$Class <- z1$Class  # reattach the genus names of each datapoint
-head(z2)  # Make sure it looks right
+z2 <- as.data.frame(max.pca$x)
+z2$Species <- z1$Species
+z2$Class <-z1$Class
+z2$Source <-z1$Source
+z2$Specimen <-z1$Specimen
+head(z2)
 
-pcaplot <- ggplot(data = z2, mapping = aes(x = PC1, y = PC2, shape = Class, 
-                                           col = Class, label = Class)) + geom_point()
+
+Class <- z2$Class
+
+g <- filter(z2, Class=="Homo sapiens")
+
+
+pcaplot <- ggplot(data = g, mapping = aes(x = PC1, y = PC2, shape = Class, 
+                                           col = Class, label = Class)) + geom_point(shape=4, color="grey")
 pcaplot
 
 
-t2 <- select(z,Class, SAMANDP1MD,SAMANDM1MD,SAMANDM2MD,SAMANDM3MD,SAMANDP1BL,SAMANDM1BL,SAMANDM2BL,SAMANDM3BL)
+L <- filter(z2, Specimen=="LB1R")
+
+pcaplot <- ggplot(data = g, mapping = aes(x = PC1, y = PC2, shape = Class, 
+                                          col = Class, label = Class)) + geom_point(shape=4, color="grey")
+
+
+LPlot <- ggplot(data = L, mapping = aes(x = PC1, y = PC2, shape = Specimen, 
+                                          col = Specimen, label = Specimen)) + geom_point(shape=76, color="red", size =3)
+LPlot
+
+
+
+l <- filter(z2, Specimen=="LB1L")
+lplot <- ggplot(data = l, mapping = aes(x = PC1, y = PC2, shape = Specimen, 
+                                        col = Specimen, label = Specimen)) + geom_point(data = l, shape=108, color="red", size =3)
+
+lplot
+
+S <- filter(z2, Specimen=="S4R+L")
+Splot <- ggplot(data = S, mapping = aes(x = PC1, y = PC2, shape = Specimen, 
+                                        col = Specimen, label = Source)) + geom_point(data = S, shape=83, color="green", size =3)
+
+Splot
+
+D <- filter(z2, Specimen=="D2700/2735R+L")
+Dplot <- ggplot(data = D, mapping = aes(x = PC1, y = PC2, shape = Specimen, 
+                                        col = Specimen, label = Specimen)) + geom_point(data = D, shape=68, color="orange", size =3)
+
+Dplot
+
+h <- filter(z2, Species=="H. habilis sensu lato")
+hplot <- ggplot(data = h, mapping = aes(x = PC1, y = PC2, shape = Species, 
+                                        col = Species, label = Species)) + geom_point(data = h, shape=104, color="blue", size =3)
+
+hplot
+
+
+
+
+
+
+
+
+
+
+g <- filter(z2, Class=="Homo sapiens")
+L <- filter(z2, Specimen=="LB1R")
+l <- filter(z2, Specimen=="LB1L")
+S <- filter(z2, Specimen=="S4R+L")
+D <- filter(z2, Specimen=="D2700/2735R+L")
+h <- filter(z2, Species=="H. habilis sensu lato")
+
+pcaplot <- ggplot(data = g, mapping = aes(x = PC1, y = PC2, shape = Class, 
+                                          col = Class, label = Class)) + geom_point(shape=4, color="grey") + geom_point(data=L, shape=76, color="red", size =3) + geom_point(data = l, shape=108, color="red", size =3) + geom_point(data = S, shape=83, color="green", size =3) + geom_point(data = D, shape=68, color="orange", size =3) + geom_point(data = h, shape=104, color="blue", size =3)
+pcaplot
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Homo sapiens subsample
+P <- g[1:28,]
+P
+
+
+
+
+hs <- aggregate(data = g, PC1 ~ Species, FUN = "mean", na.rm = TRUE)
+View(hs)
+
+hs2 <- aggregate(data = g, PC2 ~ Species, FUN = "mean", na.rm = TRUE)
+
+
+hs2$PC2 <- hs$PC1
+hs2
+
+
+means
+
+hsplot <- ggplot(data = hs, mapping = aes(x = PC1, y = PC2, shape = Species, 
+                                        col = Species, label = Species)) + geom_point(shape=104, color="blue", size =3)
+
+
+
+
+
+
+
+t2 <- select(z,Species,Class,Source,SAMANDP1MD,SAMANDM1MD,SAMANDM2MD,SAMANDM3MD,SAMANDP1BL,SAMANDM1BL,SAMANDM2BL,SAMANDM3BL)
 z3 <- na.omit(t2)
 z4 <-  as.data.frame(mand.pca$x)
+z4$Species <- z3$Species
 z4$Class <- z3$Class
+z4$Source <- z3$Source
 head(z4)
 
-pcaplot <- ggplot(data = z4, mapping = aes(x = PC1, y = PC2, shape = Class, 
-                                           col = Class, label = Class)) + geom_point()
+pcaplot <- ggplot(data = z4, mapping = aes(x = PC1, y = PC2, shape = Species, 
+                                           col = Species, label = Species)) + geom_point()
 pcaplot
 
 
 
 
+#MANN WHITNEY U TEST
+#PC Score for early javanese H. erectus and H. habilis
+w <- z2[3:12,]
 
+wilcox.test(PC1 ~ Species, data=w)
+wilcox.test(PC2 ~ Species, data=w)
+wilcox.test(PC3 ~ Species, data=w)
+pvalues <- c(0.1778, 0.04444, 0.8889)
 
-
-
-
-
-
-z[, 48]
-t <- select(z,MAXCSF)
-f <- na.omit(t)
-f.pca <- prcomp(f, center = TRUE, scale. = TRUE)
-f.pca
-
-t <- select(z,Specimen,Class,Species,Source,MAXCSF)
-
-t.pca <- prcomp(t[, 5:36], center = TRUE, scale. = TRUE)
-head(t)
-nrow(t)
-
-z
-
-t.pca
-summary(t.pca)
-biplot(t.pca$x[, c(1, 2)], t.pca$rotation[, c(1, 2)])
-
-
-library(dplyr)
-
-
-
-
-
-
-
-
-
-
+p.adjust(pvalues, method = "bonferroni")
 
 
 
