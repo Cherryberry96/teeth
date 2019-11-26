@@ -14,7 +14,7 @@ To begin with, I downloaded the supplemental materials and exported the dataset 
 
 
 ```{r setup, include=TRUE}
-f <- "~/Desktop/Data Replication Stuff/S4 Table restructured.xlsx"
+f <- "data/S4 Table restructured.xlsx"
 library(readxl)
 z <- read_excel(f, sheet = 1, col_names = TRUE)
 head(z)

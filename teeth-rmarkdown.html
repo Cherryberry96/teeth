@@ -372,7 +372,7 @@ summary {
 <p>Before beginning the process of replication, I first had to restructure the dataset that was provided with the publication. This involved removing variables that were irrelevant to the tests I was interested in replicating, as well as creating new variable columns to redefine and simplify existing variables. That is, where specimens were all under one variable column, other variables were added to make the dataset more suitable for analysis rather than for presentation. E.g., in the original dataset where the specimen S1b was classified only under “Archaic Homo,” and “Lower Sangiran H. erectus,” The new dataset created the “Specimen,” “Species,” “Class” and “Source” columns to better describe it as S1b (Specimen), Archaic Homo (Class), H. erectus (Species) and Lower Sangirans (Source).</p>
 <p>After restructuring the original dataset, I attempted to replicate the author’s Principal Component Analysis.</p>
 <p>To begin with, I downloaded the supplemental materials and exported the dataset into R using the readxl package and assigned the name “z” to the dataset. I then checked the variables in the datafile using the head() function.</p>
-<pre class="r"><code>f &lt;- &quot;~/Desktop/Data Replication Stuff/S4 Table restructured.xlsx&quot;
+<pre class="r"><code>f &lt;- &quot;data/S4 Table restructured.xlsx&quot;
 library(readxl)
 z &lt;- read_excel(f, sheet = 1, col_names = TRUE)
 head(z)</code></pre>

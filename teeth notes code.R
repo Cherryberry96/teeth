@@ -220,7 +220,6 @@ z2$Specimen <-z1$Specimen
 head(z2)
 
 
-Class <- z2$Class
 
 g <- filter(z2, Class=="Homo sapiens")
 
@@ -353,5 +352,66 @@ pvalues <- c(0.1778, 0.04444, 0.8889)
 
 p.adjust(pvalues, method = "bonferroni")
 
+w2 <- z4[5:10,]
+
+wilcox.test(PC1 ~ Species, data=w2)
+wilcox.test(PC2 ~ Species, data=w2)
+wilcox.test(PC3 ~ Species, data=w2)
+
+pvalues2 <- c(0.3333, 1, 0.3333)
+p.adjust(pvalues2, method = "bonferroni")
+------------------------------------------------------------------------------------------------------------
 
 
+
+max <- select(z,SAMAXP1MD,SAMAXP2MD,SAMAXM1MD,SAMAXM2MD,SAMAXP1BL,SAMAXP2BL,SAMAXM1BL,SAMAXM2BL)
+new_max <- na.omit(max)
+max.pca <- prcomp(new_max, center = TRUE, scale. = TRUE)
+summary(max.pca)
+
+
+t <- select(z,Species,Class,Source,Specimen, SAMAXP1MD,SAMAXP2MD,SAMAXM1MD,SAMAXM2MD,SAMAXP1BL,SAMAXP2BL,SAMAXM1BL,SAMAXM2BL)
+z1 <- na.omit(t)
+z2 <- as.data.frame(max.pca$x)
+z2$Species <- z1$Species
+z2$Class <-z1$Class
+z2$Source <-z1$Source
+z2$Specimen <-z1$Specimen
+head(z2)
+
+g <- filter(z2, Class=="Homo sapiens")
+L <- filter(z2, Specimen=="LB1R")
+l <- filter(z2, Specimen=="LB1L")
+S <- filter(z2, Specimen=="S4R+L")
+D <- filter(z2, Specimen=="D2700/2735R+L")
+h <- filter(z2, Species=="H. habilis sensu lato")
+
+pcaplot <- ggplot(data = g, mapping = aes(x = PC1, y = PC2, shape = Class, 
+                                          col = Class, label = Class)) + geom_point(shape=4, color="grey") + geom_point(data=L, shape=76, color="red", size =3) + geom_point(data = l, shape=108, color="red", size =3) + geom_point(data = S, shape=83, color="green", size =3) + geom_point(data = D, shape=68, color="orange", size =3) + geom_point(data = h, shape=104, color="blue", size =3)
+pcaplot
+
+
+
+
+
+t2 <- select(z,Species,Class,Source,Specimen,SAMANDP1MD,SAMANDM1MD,SAMANDM2MD,SAMANDM3MD,SAMANDP1BL,SAMANDM1BL,SAMANDM2BL,SAMANDM3BL)
+z3 <- na.omit(t2)
+z4 <-  as.data.frame(mand.pca$x)
+z4$Species <- z3$Species
+z4$Class <- z3$Class
+z4$Source <- z3$Source
+z4$Specimen <-z3$Specimen
+head(z4)
+View(z4)
+
+g1 <- filter(z4, Class=="Homo sapiens")
+L1 <- filter(z4, Specimen=="LB1R")
+l1<- filter(z4, Specimen=="LB1L")
+S1 <- filter(z4, Specimen=="S4R+L")
+D1 <- filter(z4, Specimen=="D2700/2735R+L")
+h1 <- filter(z4, Species=="H. habilis sensu lato")
+
+
+pcaplot <- ggplot(data = g1, mapping = aes(x = PC1, y = PC2, shape = Class, 
+                                          col = Class, label = Class)) + geom_point(shape=4, color="grey") + geom_point(data=L1, shape=76, color="red", size =3) + geom_point(data = l1, shape=108, color="red", size =3) + geom_point(data = S1, shape=83, color="green", size =3) + geom_point(data = D1, shape=68, color="orange", size =3) + geom_point(data = h1, shape=104, color="blue", size =3)
+pcaplot
